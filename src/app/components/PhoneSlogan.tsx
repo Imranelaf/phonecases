@@ -12,13 +12,23 @@ function PhoneSlogan() {
           height={200}
         />
       </div>
+      <div className='relative'>
       <Image 
         src='/phone-template.png'
         alt='Phone Template'
         width={250}
         height={250}
+        className='absolute z-50 '
         
       />
+      <Image 
+      src='/testimonials/1.jpg'
+      alt='dog'
+      width={250}
+      height={250}
+      className='absolute object-cover lg:rounded-[45px] rounded-[30px]'
+      />
+      </div>
     </div>
   );
 }
