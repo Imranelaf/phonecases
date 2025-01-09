@@ -7,7 +7,7 @@ function Navbar() {
             <div className='flex space-between justify-around '>
                 <div className='text-green-600 font-semibold'>Phone<span className='text-black'>Case</span></div>
                 <div>
-                    <button className='bg-green-600 flex p-2 px-4 rounded-sm text-white text-sm'>Create case  <ArrowRight className='ml-1 text-sm' /></button>
+                    <button className='bg-green-600 flex p-1 px-4 rounded-sm shadow-md text-white text-sm hover:bg-green-500'>Create case  <ArrowRight className='ml-1 text-sm' /></button>
                 </div>
             </div>
         </div>
