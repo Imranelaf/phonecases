@@ -17,11 +17,11 @@ function Viewrs() {
             key={index}
             src={user.src}
             alt={user.alt}
-            className={`h-16 w-16 bg-indigo-200 rounded-full ring-2 border-black inline-block`}
+            className={`h-14 w-14 bg-indigo-200 rounded-full ring-2 border-black inline-block`}
             
           />
         ))}
-        <div className='m-5'>
+        <div className='m-4'>
         <div className='flex '>
             {Array(5).fill(0).map((_, index)=>(
                 <Star key={index} className='w-4 h-4 text-green-600 fill-green-600' />
