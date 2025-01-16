@@ -12,7 +12,7 @@ function Hero() {
             <p className='mt-8 lg:text-xl pr-5'><i>You are not only protecting your phone with our case, but also carrying your memories wherever you go.</i></p> 
             <ul className='mt-8'>
                 {cheking.map((item, index)=>(
-                    <li key={index} className='flex font-bold text-base mt-2'>
+                    <li key={index} className='flex font-bold lg:text-base text-sm mt-2'>
                     <CheckCheck color='#15970c' className='h-6 w-6 mr-2' />
                     {item}
                     </li>

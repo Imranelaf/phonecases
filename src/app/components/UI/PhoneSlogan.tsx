@@ -26,7 +26,7 @@ function PhoneSlogan() {
       alt='dog'
       width={250}
       height={250}
-      className='absolute object-cover lg:rounded-[45px] rounded-[30px]'
+      className='absolute object-cover lg:rounded-[45px] rounded-[25px]'
       />
       </div>
     </div>

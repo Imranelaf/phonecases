@@ -2,6 +2,7 @@ import React from 'react'
 import Hero from './components/Hero'
 import Customers from './components/WhatOurCustomersSay'
 import ShowExamples from './components/ShowExamples'
+import Footer from './components/Footer'
 
 function page() {
   return (
