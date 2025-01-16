@@ -1,6 +1,6 @@
 import React from 'react'
 import Hero from './components/Hero'
-import Customers from './components/Customers'
+import Customers from './components/WhatOurCustomersSay'
 import ShowExamples from './components/ShowExamples'
 
 function page() {
