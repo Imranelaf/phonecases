@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 export default function ShowExamples() {
     const images = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg"];
@@ -105,7 +106,8 @@ export default function ShowExamples() {
                         </div>
                     ))}
                 </div>
-                <button className="bg-green-600 flex p-2 px-5 rounded-sm shadow-md text-white hover:bg-green-500">Create your own case now</button>
+                
+                    <Link href={'configure/upload'} className="bg-green-600 flex p-2 px-5 rounded-sm shadow-md text-white hover:bg-green-500">Create your own case now</Link>
             </div>
 
         </div>

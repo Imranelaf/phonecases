@@ -1,7 +1,6 @@
-import React from 'react'
 import { CheckCheck } from 'lucide-react';
 import PhoneSlogan from './UI/PhoneSlogan';
-import Viewrs from './UI/Viewrs';
+import Viewrs from './UI/Viewers';
 
 function Hero() {
     const cheking = ["High-quality, durable material", "5 year print guarantee", "Modern iPhone models supported"  ]
