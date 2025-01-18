@@ -1,8 +1,16 @@
 'use client'
 
+/*
+ * This code handles image uploads using `react-dropzone` for drag-and-drop functionality.
+ * Features:
+ * - Uses `onDropAccepted` and `onDropRejected` for file validation.
+ * - Displays error notifications for invalid files using `toast` from shadcn.
+ * - Redirects to a configuration page (design) after successful upload.
+ * - Uses `useUploadThing` for cloud storage of uploaded images.
+ */
+
 import { Progress } from '@/components/ui/progress'
 import { useToast } from '@/hooks/use-toast'
-import Toaster from '@/lib/Toaster'
 import { useUploadThing } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
 import { Image, LoaderPinwheel } from 'lucide-react'
@@ -15,12 +23,11 @@ import Dropzone, { FileRejection } from 'react-dropzone'
 function Page() {
     const [onDrag, setOnDrag] = useState<boolean>(false)
     const [progress, setProgress] = useState<number>(0)
-    const [isUpload, setIsUpload] = useState<boolean>(false)
 
     const route = useRouter()
     const { toast } = useToast()
     //imageUploader and serverData.configId  are definded in the core.ts
-    const {startUpload}= useUploadThing("imageUploader" , { 
+    const {startUpload, isUploading}= useUploadThing("imageUploader" , { 
         onClientUploadComplete: ([data])=>{
             const configId = data.serverData.configId 
             startTransition(()=>{
@@ -33,16 +40,13 @@ function Page() {
     }) 
 
     const dropAccepted = (acceptedFile : File[]) => {
-        setIsUpload(true)
-        console.log("file accepted", acceptedFile);
         startUpload(acceptedFile, {configId: undefined})
 
         setOnDrag(false)
-        setIsUpload(false)
     }
     const dropRejected = (fileRejection: FileRejection[]) => {
         const [file] = fileRejection 
-        setIsUpload(true)
+        
         
 
     toast({
@@ -52,7 +56,6 @@ function Page() {
     })
 
     setOnDrag(false)
-    setIsUpload(false)
 
     }
 
@@ -80,7 +83,7 @@ function Page() {
                         >
                             <input {...getInputProps()} />
                             {
-                                isUpload ? (<div className='flex flex-col items-center'>
+                                isUploading ? (<div className='flex flex-col items-center'>
                                     <LoaderPinwheel className='animate-spin m-2' />
                                     <p className='text-gray-600'>Uploading...</p>
                                      <Progress value={progress} className='mt-2 w-40' /></div>) : 
