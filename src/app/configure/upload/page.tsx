@@ -1,9 +1,13 @@
 'use client'
 
 import { Progress } from '@/components/ui/progress'
+import { useToast } from '@/hooks/use-toast'
+import Toaster from '@/lib/Toaster'
+import { useUploadThing } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
 import { Image, LoaderPinwheel } from 'lucide-react'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { startTransition, useState } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
 
 
@@ -11,13 +15,48 @@ import Dropzone, { FileRejection } from 'react-dropzone'
 function Page() {
     const [onDrag, setOnDrag] = useState<boolean>(false)
     const [progress, setProgress] = useState<number>(0)
-    const dropAccepted = () => {
-        console.log("file accepted");
-        setOnDrag(false)
-    }
-    const dropRejected = () => { }
+    const [isUpload, setIsUpload] = useState<boolean>(false)
 
-    const isUpload = true
+    const route = useRouter()
+    const { toast } = useToast()
+    //imageUploader and serverData.configId  are definded in the core.ts
+    const {startUpload}= useUploadThing("imageUploader" , { 
+        onClientUploadComplete: ([data])=>{
+            const configId = data.serverData.configId 
+            startTransition(()=>{
+                 route.push(`/configure/design?=id=${configId}`)   
+            })
+        },
+        onUploadProgress(p) {
+            setProgress(p)
+        },
+    }) 
+
+    const dropAccepted = (acceptedFile : File[]) => {
+        setIsUpload(true)
+        console.log("file accepted", acceptedFile);
+        startUpload(acceptedFile, {configId: undefined})
+
+        setOnDrag(false)
+        setIsUpload(false)
+    }
+    const dropRejected = (fileRejection: FileRejection[]) => {
+        const [file] = fileRejection 
+        setIsUpload(true)
+        
+
+    toast({
+        title:`${file.file.name} type is not supported`,
+        description:'Please choose JPEG, JPG or PNG type image',
+        variant:'destructive'
+    })
+
+    setOnDrag(false)
+    setIsUpload(false)
+
+    }
+
+   
 
     return (
         <div className={"w-full p-5 min-h-[calc(100vh_-_9.5rem)] flex justify-center"}>
@@ -58,6 +97,7 @@ function Page() {
                 }
 
             </Dropzone>
+            
         </div>
 
 
