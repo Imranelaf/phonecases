@@ -13,6 +13,7 @@ import { Progress } from '@/components/ui/progress'
 import { useToast } from '@/hooks/use-toast'
 import { useUploadThing } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
+import { useImageStore } from '@/Zustand/store'
 import { Image, LoaderPinwheel } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { startTransition, useState } from 'react'
@@ -29,7 +30,9 @@ function Page() {
     //imageUploader and serverData.configId  are definded in the core.ts
     const {startUpload, isUploading}= useUploadThing("imageUploader" , { 
         onClientUploadComplete: ([data])=>{
-            const configId = data.serverData.configId 
+            const configId = data.key
+            useImageStore.getState().setImageUrl(data.url)
+            
             startTransition(()=>{
                  route.push(`/configure/design?=id=${configId}`)   
             })
@@ -62,7 +65,8 @@ function Page() {
    
 
     return (
-        <div className={"w-full p-5 min-h-[calc(100vh_-_9.5rem)] flex justify-center"}>
+        <div className={"w-full p-5 min-h-[calc(100vh_-_16.5rem_-_1px)] flex justify-center"}>
+            
 
             <Dropzone
                 onDropAccepted={dropAccepted}
