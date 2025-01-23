@@ -9,6 +9,7 @@
  * - Uses `useUploadThing` for cloud storage of uploaded images.
  */
 
+
 import { Progress } from '@/components/ui/progress'
 import { useToast } from '@/hooks/use-toast'
 import { useUploadThing } from '@/lib/uploadthing'
@@ -19,55 +20,44 @@ import { useRouter } from 'next/navigation'
 import { startTransition, useState } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
 
-
-
 function Page() {
     const [onDrag, setOnDrag] = useState<boolean>(false)
     const [progress, setProgress] = useState<number>(0)
 
-    const route = useRouter()
+    const router = useRouter()
     const { toast } = useToast()
-    //imageUploader and serverData.configId  are definded in the core.ts
-    const {startUpload, isUploading}= useUploadThing("imageUploader" , { 
-        onClientUploadComplete: ([data])=>{
-            const configId = data.key
-            useImageStore.getState().setImageUrl(data.url)
-            
-            startTransition(()=>{
-                 route.push(`/configure/design?=id=${configId}`)   
+    const { setImageUrl, setConfigId } = useImageStore() // Add `setConfigId`
+
+    const { startUpload, isUploading } = useUploadThing("imageUploader", {
+        onClientUploadComplete: ([data]) => {
+            setImageUrl(data.url)
+            setConfigId(data.key) // Save `configId` in the store
+            startTransition(() => {
+                router.push(`/configure/design?id=${data.key}`)
             })
         },
         onUploadProgress(p) {
             setProgress(p)
         },
-    }) 
-
-    const dropAccepted = (acceptedFile : File[]) => {
-        startUpload(acceptedFile, {configId: undefined})
-
-        setOnDrag(false)
-    }
-    const dropRejected = (fileRejection: FileRejection[]) => {
-        const [file] = fileRejection 
-        
-        
-
-    toast({
-        title:`${file.file.name} type is not supported`,
-        description:'Please choose JPEG, JPG or PNG type image',
-        variant:'destructive'
     })
 
-    setOnDrag(false)
-
+    const dropAccepted = (acceptedFiles: File[]) => {
+        startUpload(acceptedFiles, { configId: undefined })
+        setOnDrag(false)
     }
 
-   
+    const dropRejected = (fileRejections: FileRejection[]) => {
+        const [file] = fileRejections
+        toast({
+            title: `${file.file.name} type is not supported`,
+            description: 'Please choose JPEG, JPG, or PNG type image',
+            variant: 'destructive',
+        })
+        setOnDrag(false)
+    }
 
     return (
-        <div className={"w-full p-5 min-h-[calc(100vh_-_16.5rem_-_1px)] flex justify-center"}>
-            
-
+        <div className="w-full p-5 min-h-[calc(100vh_-_16.5rem_-_1px)] flex justify-center">
             <Dropzone
                 onDropAccepted={dropAccepted}
                 onDropRejected={dropRejected}
@@ -75,41 +65,37 @@ function Page() {
                 onDragEnter={() => setOnDrag(true)}
                 onDragLeave={() => setOnDrag(false)}
             >
-
-                {
-                    ({ getRootProps, getInputProps }) => (
-                        <div className={cn("relative w-10/12 h-10/12 text-gray-600 bg-slate-100 border border-gray-300 rounded-2xl flex flex-col items-center justify-center",
+                {({ getRootProps, getInputProps }) => (
+                    <div
+                        className={cn(
+                            "relative w-10/12 h-10/12 text-gray-600 bg-slate-100 border border-gray-300 rounded-2xl flex flex-col items-center justify-center",
                             {
-                                'bg-gray-200 border-gray-600': onDrag
+                                'bg-gray-200 border-gray-600': onDrag,
                             }
                         )}
-                            {...getRootProps()}
-                        >
-                            <input {...getInputProps()} />
-                            {
-                                isUploading ? (<div className='flex flex-col items-center'>
-                                    <LoaderPinwheel className='animate-spin m-2' />
-                                    <p className='text-gray-600'>Uploading...</p>
-                                     <Progress value={progress} className='mt-2 w-40' /></div>) : 
-                                     (<div className='flex flex-col items-center'>
-                                        <Image  className={cn('m-2', {'animate-bounce': onDrag})}/>
-                                        <p> <span className='font-semibold'>Click to upload</span> or drag and drop</p>
-                                        <p>PNG, JPG, JPEG</p>
-                                     </div>)
-                            }
-                            
-                            
-                        </div>
-                    )
-                }
-
+                        {...getRootProps()}
+                    >
+                        <input {...getInputProps()} />
+                        {isUploading ? (
+                            <div className="flex flex-col items-center">
+                                <LoaderPinwheel className="animate-spin m-2" />
+                                <p className="text-gray-600">Uploading...</p>
+                                <Progress value={progress} className="mt-2 w-40" />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center">
+                                <Image className={cn('m-2', { 'animate-bounce': onDrag })} />
+                                <p>
+                                    <span className="font-semibold">Click to upload</span> or drag and drop
+                                </p>
+                                <p>PNG, JPG, JPEG</p>
+                            </div>
+                        )}
+                    </div>
+                )}
             </Dropzone>
-            
         </div>
-
-
-
-    );
+    )
 }
 
-export default Page;
+export default Page

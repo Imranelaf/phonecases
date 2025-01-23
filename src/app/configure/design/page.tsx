@@ -1,11 +1,15 @@
 'use client'
-
+import { useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useImageStore } from "@/Zustand/store";
-import Image from "next/image";
+import NextImage from "next/image";
+import Link from 'next/link';
 
 export default function Page() {
     const imageUrl = useImageStore((state) => state.imageUrl);
+    const configId = useImageStore((state) => state.configId);
+    const setDimensions = useImageStore((state) => state.setDimensions);
+    const [imageDimensions, setImageDimensions] = useState({ width: 245, height: 500 });
 
     if (!imageUrl) {
         return (
@@ -15,30 +19,54 @@ export default function Page() {
         );
     }
 
+    const handleZoom = (ref: { state: { scale: number } }) => {
+        const scale = ref.state.scale;
+        const originalWidth = 245;
+        const originalHeight = 500;
+
+        const newWidth = originalWidth * scale;
+        const newHeight = originalHeight * scale;
+
+        setImageDimensions({ width: newWidth, height: newHeight });
+        setDimensions(newWidth, newHeight);
+    };
+
     return (
         <div className="w-full min-h-[600px] flex flex-col items-center p-5">
-            {/* Phone Template */}
             <div className="relative h-[500px] w-[245px] rounded-[40px] overflow-hidden">
-                <Image
+                <NextImage
                     src='/phone-template.png'
                     alt='Phone Template'
-                    width={250}
-                    height={250}
+                    width={245}
+                    height={500}
                     className='absolute z-50 pointer-events-none'
                 />
-
-                {/* User's Image */}
                 <div className="absolute inset-0 z-40">
-                    <TransformWrapper>
+                    <TransformWrapper onZoom={handleZoom}>
                         <TransformComponent>
                             <img
                                 src={imageUrl}
                                 alt="user's picture"
-                                className="w-full h-full object-cover"
+                                style={{
+                                    width: `${imageDimensions.width}px`,
+                                    height: `${imageDimensions.height}px`,
+                                }}
+                                className="object-cover"
                             />
                         </TransformComponent>
                     </TransformWrapper>
                 </div>
+            </div>
+
+            <div className="mt-4">
+                <p>Image Width: {imageDimensions.width.toFixed(2)}px</p>
+                <p>Image Height: {imageDimensions.height.toFixed(2)}px</p>
+                <Link
+                    className="bg-green-600 flex p-1 px-4 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500"
+                    href={`/configure/final?id=${configId}`}
+                >
+                    I'm fine with my design
+                </Link>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { CheckCheck } from 'lucide-react';
 
 const STEPS = [
   {
@@ -33,7 +34,7 @@ export default function Steps() {
       setSteps(0)
     }else if (pathname.endsWith('design')) {
       setSteps(1)
-    } else if (pathname.endsWith('hello')) {
+    } else if (pathname.endsWith('final')) {
       setSteps(2)
     }
   }, [pathname])
@@ -49,8 +50,11 @@ export default function Steps() {
         >
           <p>{step.s}</p>
           <p className="italic">{step.name}</p>
-          <p className="hidden lg:block">{step.description}</p>
-          {step.number < steps ? <p>Completed</p> : <p>Progress</p>}
+          {
+            step.number < steps && <p className="hidden lg:block">{step.description}</p>
+          }
+          
+          {step.number < steps ? (<div> <CheckCheck /> <p>Completed</p></div>) : <p>Progress</p>}
         </div>
       ))}
     </div>
