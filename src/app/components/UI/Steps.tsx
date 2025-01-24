@@ -49,12 +49,17 @@ export default function Steps() {
           }`}
         >
           <p>{step.s}</p>
-          <p className="italic">{step.name}</p>
+          
           {
-            step.number < steps && <p className="hidden lg:block">{step.description}</p>
+            step.number >= steps ? (
+              <>
+              <p className="italic">{step.name}</p>
+            <p className="hidden lg:block">{step.description}</p>
+            </>)
+             : null
           }
           
-          {step.number < steps ? (<div> <CheckCheck /> <p>Completed</p></div>) : <p>Progress</p>}
+          {step.number < steps ? (<div className="flex"> <CheckCheck /> <p className="mx-1">Completed</p></div>) : <p>Progress</p>}
         </div>
       ))}
     </div>

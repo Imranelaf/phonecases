@@ -1,6 +1,7 @@
 'use client';
 import { useImageStore } from '@/Zustand/store';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 const IPHONES = [
@@ -79,7 +80,7 @@ function Page() {
 
         <div>
           <p className="italic lg:text-xl mt-5">Model</p>
-          <select className="lg:w-11/12 p-3 italic lg:m-5 m-3 bg-transparent border border-black focus:border-green-600">
+          <select className="lg:w-11/12 p-3 italic lg:m-5 m-3 bg-transparent border border-black focus:ring-green-500 ">
             {IPHONES.map((iphone) => (
               <option key={iphone} value={iphone}>
                 {iphone}
@@ -92,7 +93,7 @@ function Page() {
           <p className="italic lg:text-xl my-5">Price: <span className="lg:text-2xl text-xl italic text-green-600 mx-3">14$</span></p>
           
         </div>
-        <button className='w-auto bg-green-600 justify-center flex p-1 lg:px-4 px-2 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500 lg:m-5 my-4'>Continue</button>
+        <Link href={'/payment'} className='w-auto bg-green-600 justify-center flex p-1 lg:px-4 px-2 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500 lg:m-5 my-4'>Continue</Link>
       </div>
     </div>
   );
