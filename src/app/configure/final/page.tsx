@@ -23,6 +23,8 @@ function Page() {
   const imageUrl = useImageStore((state) => state.imageUrl);
   const newWidth = useImageStore((state) => state.newWidth);
   const newHeight = useImageStore((state) => state.newHeight);
+  const configId = useImageStore((state) => state.configId);
+
   const [color, setColor] = useState<string>(COLORS[0].value);
 
   if (!imageUrl) {
@@ -93,7 +95,7 @@ function Page() {
           <p className="italic lg:text-xl my-5">Price: <span className="lg:text-2xl text-xl italic text-green-600 mx-3">14$</span></p>
           
         </div>
-        <Link href={'/payment'} className='w-auto bg-green-600 justify-center flex p-1 lg:px-4 px-2 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500 lg:m-5 my-4'>Continue</Link>
+        <Link href={`/payment?id=${configId}`} className='w-auto bg-green-600 justify-center flex p-1 lg:px-4 px-2 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500 lg:m-5 my-4'>Continue</Link>
       </div>
     </div>
   );
