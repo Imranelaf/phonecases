@@ -59,8 +59,6 @@ export default function Page() {
             </div>
 
             <div className="mt-4">
-                <p>Image Width: {imageDimensions.width.toFixed(2)}px</p>
-                <p>Image Height: {imageDimensions.height.toFixed(2)}px</p>
                 <Link
                     className="bg-green-600 flex p-1 px-4 rounded-sm shadow-md text-white text-lg font-semibold tracking-wide text-sm hover:bg-green-500"
                     href={`/configure/final?id=${configId}`}

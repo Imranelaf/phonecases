@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useUploadThing } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
 import { useImageStore } from '@/Zustand/store'
-import { Image, LoaderPinwheel } from 'lucide-react'
+import { Image, Loader2, LoaderPinwheel } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { startTransition, useState } from 'react'
 import Dropzone, { FileRejection } from 'react-dropzone'
@@ -23,15 +23,17 @@ import Dropzone, { FileRejection } from 'react-dropzone'
 function Page() {
     const [onDrag, setOnDrag] = useState<boolean>(false)
     const [progress, setProgress] = useState<number>(0)
+    const [isPending, setIsPending] = useState(false)
 
     const router = useRouter()
     const { toast } = useToast()
-    const { setImageUrl, setConfigId } = useImageStore() // Add `setConfigId`
+    const { setImageUrl, setConfigId } = useImageStore()
 
     const { startUpload, isUploading } = useUploadThing("imageUploader", {
         onClientUploadComplete: ([data]) => {
             setImageUrl(data.url)
             setConfigId(data.key) // Save `configId` in the store
+            setIsPending(true)
             startTransition(() => {
                 router.push(`/configure/design?id=${data.key}`)
             })
@@ -82,6 +84,12 @@ function Page() {
                                 <p className="text-gray-600">Uploading...</p>
                                 <Progress value={progress} className="mt-2 w-40" />
                             </div>
+                        ) : (isPending ? 
+                            (<><Loader2 className='animate-spin m-2' />
+                            <p>you well be redirecting you soon ...</p>
+                            </>
+
+
                         ) : (
                             <div className="flex flex-col items-center">
                                 <Image className={cn('m-2', { 'animate-bounce': onDrag })} />
@@ -90,7 +98,7 @@ function Page() {
                                 </p>
                                 <p>PNG, JPG, JPEG</p>
                             </div>
-                        )}
+                        ))}
                     </div>
                 )}
             </Dropzone>
